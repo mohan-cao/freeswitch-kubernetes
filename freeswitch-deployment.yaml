@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (ae2a39403)
+  labels:
+    io.kompose.service: freeswitch
+  name: freeswitch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: freeswitch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (ae2a39403)
+      labels:
+        io.kompose.service: freeswitch
+    spec:
+      hostNetwork: true
+      containers:
+        - image: ghcr.io/mohan-cao/freeswitch-docker-image:v1.0.0
+          name: freeswitch
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /etc/freeswitch
+              name: freeswitch-configs
+      hostname: freeswitch
+      restartPolicy: Always
+      volumes:
+        - name: freeswitch-configs
+          persistentVolumeClaim:
+            claimName: freeswitch-configs
+
