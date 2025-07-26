@@ -12,6 +12,13 @@ spec:
     - ReadWriteOnce
   local:
     path: '/etc/freeswitch'
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: NODE_NAME
+              operator: In
+              values: ['true']
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
